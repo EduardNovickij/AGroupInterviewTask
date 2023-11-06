@@ -1,5 +1,6 @@
 package com.AGroupInterviewTask.entities;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
@@ -14,18 +15,12 @@ public class Person {
     private final String birthDate;
     private final String gender;
 
-    public Person(@JsonProperty("givenName") String givenName,
+    @JsonCreator
+    public Person(@JsonProperty("personId") Integer personId,
+                  @JsonProperty("givenName") String givenName,
                   @JsonProperty("familyName") String familyName,
                   @JsonProperty("birthDate") String birthDate,
                   @JsonProperty("gender") String gender) {
-        this.personId = 0;
-        this.givenName = givenName;
-        this.familyName = familyName;
-        this.birthDate = birthDate;
-        this.gender = gender;
-    }
-
-    public Person(Integer personId, String givenName, String familyName, String birthDate, String gender) {
         this.personId = personId;
         this.givenName = givenName;
         this.familyName = familyName;

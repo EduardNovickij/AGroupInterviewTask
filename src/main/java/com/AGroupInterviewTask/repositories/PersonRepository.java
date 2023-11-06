@@ -40,18 +40,18 @@ public class PersonRepository {
                 person.getGender());
     }
 
-    public Person findOne(String asOfDate , Integer id) throws EmptyResultDataAccessException {
+    public Person findOne(String asOfDate , Integer personId) throws EmptyResultDataAccessException {
         String sqlQuery = "SELECT personId, givenName, familyName, birthDate, gender " +
                 "FROM Person WHERE personId = ? AND timestamp ";
 
         long millis = System.currentTimeMillis();
         if(asOfDate.equals(new Date(millis).toString())) {
             sqlQuery += "IS NULL";
-            return jdbcTemplate.queryForObject(sqlQuery, this::mapRowToPerson, id);
+            return jdbcTemplate.queryForObject(sqlQuery, this::mapRowToPerson, personId);
         }
         else {
             sqlQuery += "= DATE(?)";
-            return jdbcTemplate.queryForObject(sqlQuery, this::mapRowToPerson, id, asOfDate);
+            return jdbcTemplate.queryForObject(sqlQuery, this::mapRowToPerson, personId, asOfDate);
         }
     }
 
@@ -82,8 +82,8 @@ public class PersonRepository {
                 personId);
     }
 
-    public void delete(Integer id) throws DataAccessException {
+    public void delete(Integer personId) throws DataAccessException {
         String sqlQuery = "DELETE FROM Person WHERE personId = ? AND timestamp IS NULL";
-        jdbcTemplate.update(sqlQuery, id);
+        jdbcTemplate.update(sqlQuery, personId);
     }
 }
