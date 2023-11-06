@@ -1,85 +1,66 @@
 package com.AGroupInterviewTask.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 @Entity
 @Table(name = "Person")
 public class Person {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int personId;
-    private String givenName;
-    private String familyName;
-    private String birthDate;
-    private String gender;
+    private final Integer personId;
+    private final String givenName;
+    private final String familyName;
+    private final String birthDate;
+    private final String gender;
 
-    public Person(String givenName, String familyName, String birthDate, String gender) {
+    public Person(@JsonProperty("givenName") String givenName,
+                  @JsonProperty("familyName") String familyName,
+                  @JsonProperty("birthDate") String birthDate,
+                  @JsonProperty("gender") String gender) {
+        this.personId = 0;
         this.givenName = givenName;
         this.familyName = familyName;
         this.birthDate = birthDate;
         this.gender = gender;
     }
 
-    public Person(ResultSet resultSet) throws SQLException {
-        this.personId = resultSet.getInt("personId");
-        this.givenName = resultSet.getString("givenName");
-        this.familyName = resultSet.getString("familyName");
-        this.birthDate = resultSet.getString("birthDate");
-        this.gender = resultSet.getString("gender");
-    }
-
-    public int getPersonId() {
-        return personId;
-    }
-
-    public void setPersonId(int personId) {
+    public Person(Integer personId, String givenName, String familyName, String birthDate, String gender) {
         this.personId = personId;
+        this.givenName = givenName;
+        this.familyName = familyName;
+        this.birthDate = birthDate;
+        this.gender = gender;
+    }
+
+    public Integer getPersonId() {
+        return personId;
     }
 
     public String getGivenName() {
         return givenName;
     }
 
-    public void setGivenName(String givenName) {
-        this.givenName = givenName;
-    }
-
     public String getFamilyName() {
         return familyName;
-    }
-
-    public void setFamilyName(String familyName) {
-        this.familyName = familyName;
     }
 
     public String getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(String birthDate) {
-        this.birthDate = birthDate;
-    }
-
     public String getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
     @Override
     public String toString() {
-        return "Person{" +
+        return "{" +
                 "personId=" + personId +
                 ", givenName='" + givenName + '\'' +
                 ", familyName='" + familyName + '\'' +
-                ", birthDate=" + birthDate +
-                ", gender=" + gender +
+                ", birthDate='" + birthDate + '\'' +
+                ", gender='" + gender + '\'' +
                 '}';
     }
 }
