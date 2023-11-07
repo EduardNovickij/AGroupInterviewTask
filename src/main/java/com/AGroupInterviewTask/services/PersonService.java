@@ -1,6 +1,11 @@
 package com.AGroupInterviewTask.services;
 
+import com.AGroupInterviewTask.dtos.PersonDTO;
 import com.AGroupInterviewTask.entities.Person;
+import com.AGroupInterviewTask.entities.PersonAddress;
+import com.AGroupInterviewTask.entities.PersonLegalId;
+import com.AGroupInterviewTask.repositories.PersonAddressRepository;
+import com.AGroupInterviewTask.repositories.PersonLegalIdRepository;
 import com.AGroupInterviewTask.repositories.PersonRepository;
 import com.AGroupInterviewTask.validators.DateValidator;
 import com.AGroupInterviewTask.validators.PersonValidator;
@@ -11,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("personService")
@@ -18,6 +24,12 @@ public class PersonService implements IPersonService {
 
     @Autowired
     private PersonRepository personRepository;
+
+    @Autowired
+    private PersonAddressRepository personAddressRepository;
+
+    @Autowired
+    private PersonLegalIdRepository personLegalIdRepository;
 
     private final PersonValidator personValidator = new PersonValidator();
     private final DateValidator dateValidator = new DateValidator();
@@ -43,12 +55,18 @@ public class PersonService implements IPersonService {
     public ResponseEntity findOne(String asOfDate, Integer personId) {
         try {
             dateValidator.checkDateFormat(asOfDate);
+            personValidator.checkIfPersonExists(personId, personRepository);
         }
         catch (Exception exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(exception.getMessage()); }
 
         try {
-            Person result = personRepository.findOne(asOfDate, personId);
+            Person person = personRepository.findOne(asOfDate, personId);
+            List<PersonAddress> personAddressList = personAddressRepository.findAll(asOfDate, personId);
+            List<PersonLegalId> personLegalIdList = personLegalIdRepository.findAll(asOfDate, personId);
+
+            PersonDTO result = new PersonDTO(person, personAddressList, personLegalIdList);
+
             return ResponseEntity.status(HttpStatus.OK)
                     .body(result);
         } catch (EmptyResultDataAccessException exception) {
@@ -65,13 +83,22 @@ public class PersonService implements IPersonService {
         catch (Exception exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(exception.getMessage()); }
 
-        List<Person> result = personRepository.findAll(asOfDate);
+        List<Person> personList = personRepository.findAll(asOfDate);
 
-        if (result.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        if (personList.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body("No data found.");
 
-        else return ResponseEntity.status(HttpStatus.OK)
-                .body(result);
+        else {
+            List<PersonDTO> result = new ArrayList<>();
+            personList.forEach((person) -> {
+                List<PersonAddress> personAddressList = personAddressRepository.findAll(asOfDate, person.getPersonId());
+                List<PersonLegalId> personLegalIdList = personLegalIdRepository.findAll(asOfDate, person.getPersonId());
+                result.add(new PersonDTO(person, personAddressList, personLegalIdList));
+                    });
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(result);
+        }
     }
 
     @Override
