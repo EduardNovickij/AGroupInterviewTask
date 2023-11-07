@@ -58,6 +58,23 @@ public class PersonAddressRepository {
         }
     }
 
+    public List<PersonAddress> findAll(String asOfDate) {
+        String sqlQuery = "SELECT addressType, personId, city, street, appartment " +
+                "FROM (SELECT AddressTypes.addressType, PersonAddress.personId, PersonAddress.city, PersonAddress.street, PersonAddress.appartment, PersonAddress.timestamp " +
+                "FROM PersonAddress INNER JOIN AddressTypes ON PersonAddress.addressType=AddressTypes.id) " +
+                "WHERE timestamp ";
+
+        long millis = System.currentTimeMillis();
+        if(asOfDate.equals(new Date(millis).toString())) {
+            sqlQuery += "IS NULL";
+            return jdbcTemplate.query(sqlQuery, this::mapRowToPersonAddress);
+        }
+        else {
+            sqlQuery += "= DATE(?)";
+            return jdbcTemplate.query(sqlQuery, this::mapRowToPersonAddress, asOfDate);
+        }
+    }
+
     public List<PersonAddress> findAll(String asOfDate, Integer personId) {
         String sqlQuery = "SELECT addressType, personId, city, street, appartment " +
                 "FROM (SELECT AddressTypes.addressType, PersonAddress.personId, PersonAddress.city, PersonAddress.street, PersonAddress.appartment, PersonAddress.timestamp " +
@@ -72,6 +89,23 @@ public class PersonAddressRepository {
         else {
             sqlQuery += "= DATE(?)";
             return jdbcTemplate.query(sqlQuery, this::mapRowToPersonAddress, personId, asOfDate);
+        }
+    }
+
+    public List<PersonAddress> findAll(String asOfDate, String addressType) {
+        String sqlQuery = "SELECT addressType, personId, city, street, appartment " +
+                "FROM (SELECT AddressTypes.addressType, PersonAddress.personId, PersonAddress.city, PersonAddress.street, PersonAddress.appartment, PersonAddress.timestamp " +
+                "FROM PersonAddress INNER JOIN AddressTypes ON PersonAddress.addressType=AddressTypes.id) " +
+                "WHERE addressType = ? AND timestamp ";
+
+        long millis = System.currentTimeMillis();
+        if(asOfDate.equals(new Date(millis).toString())) {
+            sqlQuery += "IS NULL";
+            return jdbcTemplate.query(sqlQuery, this::mapRowToPersonAddress, addressType);
+        }
+        else {
+            sqlQuery += "= DATE(?)";
+            return jdbcTemplate.query(sqlQuery, this::mapRowToPersonAddress, addressType, asOfDate);
         }
     }
 

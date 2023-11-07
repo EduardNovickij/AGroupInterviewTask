@@ -9,7 +9,11 @@ public interface IPersonAddressService {
 
     ResponseEntity findOne(String asOfDate, Integer personId, String addressType);
 
+    ResponseEntity findAll(String asOfDate);
+
     ResponseEntity findAll(String asOfDate, Integer personId);
+
+    ResponseEntity findAll(String asOfDate, String idType);
 
     ResponseEntity update(PersonAddress personAddress, Integer personId, String addressType);
 

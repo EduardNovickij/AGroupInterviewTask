@@ -53,7 +53,7 @@ public class PersonAddress {
     public String toString() {
         return "{" +
                 "addressType=" + personAddressKey.getAddressType() +
-                ", personId=" + personAddressKey.getPersonId() +
+                ", personId=" + personAddressKey.getPersonId() + '\'' +
                 ", city='" + city + '\'' +
                 ", street='" + street + '\'' +
                 ", appartment='" + appartment + '\'' +

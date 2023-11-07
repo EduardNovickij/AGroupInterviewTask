@@ -5,23 +5,13 @@ import com.AGroupInterviewTask.repositories.PersonRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.sql.Date;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.time.format.ResolverStyle;
 
 public record PersonValidator() {
-    private static boolean isDateFormatValid(String date) {
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd")
-                    .withResolverStyle(ResolverStyle.STRICT);
-            formatter.parse(date);
-            return true;
-        } catch (DateTimeParseException exception) {
-            return false;
-        }
-    }
+    private static final DateValidator dateValidator = new DateValidator();
 
     public void checkPersonInput(Person person) throws Exception {
+        dateValidator.checkDateFormat(person.getBirthDate());
+
         int maxGivenNameLength = 50;
         int minGivenNameLength = 1;
 
@@ -42,17 +32,6 @@ public record PersonValidator() {
         if(person.getGender().length() != genderLength) errorMessageEnd += "gender must be of length " + genderLength + "\n";
 
         if(person.getBirthDate().length() == 0) errorMessageEnd += "birthDate can't be empty\n";
-        if(!isDateFormatValid(person.getBirthDate())) errorMessageEnd += "birthDate must be in YYYY-MM-DD format\n";
-
-        if(!errorMessageEnd.equals("")) throw new Exception(errorMessageStart + errorMessageEnd);
-    }
-
-    public void dateValidator(String asOfDate) throws Exception {
-        String errorMessageStart = "Incorrect input: \n";
-        String errorMessageEnd = "";
-
-        if(asOfDate.length() == 0) errorMessageEnd += "asOfDate can't be empty\n";
-        if(!isDateFormatValid(asOfDate)) errorMessageEnd += "asOfDate must be in YYYY-MM-DD format\n";
 
         if(!errorMessageEnd.equals("")) throw new Exception(errorMessageStart + errorMessageEnd);
     }

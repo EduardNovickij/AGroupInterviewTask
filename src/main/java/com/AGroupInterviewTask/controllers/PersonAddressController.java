@@ -14,13 +14,12 @@ public class PersonAddressController {
 
     @GetMapping("/getPersonAddress")
     public ResponseEntity getPersonAddress(@RequestParam(name = "asOfDate") String asOfDate,
-                                    @RequestParam(name = "personId") Integer personId,
+                                    @RequestParam(name = "personId", required = false) Integer personId,
                                     @RequestParam(name = "addressType", required = false) String addressType) {
-        if (addressType == null) {
-            return personAddressService.findAll(asOfDate, personId);
-        } else {
-            return personAddressService.findOne(asOfDate, personId, addressType);
-        }
+        if (personId == null && addressType == null) { return personAddressService.findAll(asOfDate); }
+        else if (personId == null) { return personAddressService.findAll(asOfDate, addressType); }
+        else if (addressType == null) { return personAddressService.findAll(asOfDate, personId); }
+        else return personAddressService.findOne(asOfDate, personId, addressType);
     }
 
 

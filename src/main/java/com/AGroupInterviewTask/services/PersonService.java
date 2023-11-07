@@ -2,6 +2,7 @@ package com.AGroupInterviewTask.services;
 
 import com.AGroupInterviewTask.entities.Person;
 import com.AGroupInterviewTask.repositories.PersonRepository;
+import com.AGroupInterviewTask.validators.DateValidator;
 import com.AGroupInterviewTask.validators.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -19,6 +20,7 @@ public class PersonService implements IPersonService {
     private PersonRepository personRepository;
 
     private final PersonValidator personValidator = new PersonValidator();
+    private final DateValidator dateValidator = new DateValidator();
 
     @Override
     public ResponseEntity save(Person person) {
@@ -40,7 +42,7 @@ public class PersonService implements IPersonService {
     @Override
     public ResponseEntity findOne(String asOfDate, Integer personId) {
         try {
-            personValidator.dateValidator(asOfDate);
+            dateValidator.checkDateFormat(asOfDate);
         }
         catch (Exception exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(exception.getMessage()); }
@@ -58,7 +60,7 @@ public class PersonService implements IPersonService {
     @Override
     public ResponseEntity findAll(String asOfDate) {
         try {
-            personValidator.dateValidator(asOfDate);
+            dateValidator.checkDateFormat(asOfDate);
         }
         catch (Exception exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(exception.getMessage()); }

@@ -1,10 +1,10 @@
 package com.AGroupInterviewTask.services;
 
-import com.AGroupInterviewTask.entities.PersonAddress;
-import com.AGroupInterviewTask.repositories.PersonAddressRepository;
+import com.AGroupInterviewTask.entities.PersonLegalId;
+import com.AGroupInterviewTask.repositories.PersonLegalIdRepository;
 import com.AGroupInterviewTask.repositories.PersonRepository;
 import com.AGroupInterviewTask.validators.DateValidator;
-import com.AGroupInterviewTask.validators.PersonAddressValidator;
+import com.AGroupInterviewTask.validators.PersonLegalIdValidator;
 import com.AGroupInterviewTask.validators.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -15,61 +15,62 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service("personAddressService")
-public class PersonAddressService implements IPersonAddressService {
-    @Autowired
-    private PersonAddressRepository personAddressRepository;
+@Service("personLegalIdService")
+public class PersonLegalIdService implements IPersonLegalIdService {
 
     @Autowired
-    private PersonRepository personRepository;
+    PersonLegalIdRepository personLegalIdRepository;
 
     @Autowired
-    private IAddressTypesService addressTypesService;
+    PersonRepository personRepository;
 
-    private final PersonAddressValidator personAddressValidator = new PersonAddressValidator();
+    @Autowired
+    LegalIdTypesService legalIdTypesService;
+
+    private final PersonLegalIdValidator personLegalIdValidator = new PersonLegalIdValidator();
     private final PersonValidator personValidator = new PersonValidator();
     private final DateValidator dateValidator = new DateValidator();
 
     @Override
-    public ResponseEntity save(PersonAddress personAddress) {
+    public ResponseEntity save(PersonLegalId personLegalId) {
         try {
-            personAddressValidator.checkPersonAddressInput(personAddress);
-            addressTypesService.findOne(personAddress.getAddressType());
-            personValidator.checkIfPersonExists(personAddress.getPersonId(), personRepository);
-            personAddressValidator.checkIfPersonAddressAlreadyExists(
-                    personAddress.getPersonId(),
-                    personAddress.getAddressType(),
-                    personAddressRepository);
+            personLegalIdValidator.checkPersonLegalIdInput(personLegalId);
+            legalIdTypesService.findOne(personLegalId.getIdType());
+            personValidator.checkIfPersonExists(personLegalId.getPersonId(), personRepository);
+            personLegalIdValidator.checkIfPersonLegalIdAlreadyExists(
+                    personLegalId.getPersonId(),
+                    personLegalId.getIdType(),
+                    personLegalIdRepository);
         }
         catch (Exception exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(exception.getMessage()); }
 
         try {
-            personAddressRepository.save(personAddress);
+            personLegalIdRepository.save(personLegalId);
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body("New PersonAddress successfully created.");
+                    .body("New PersonLegalId successfully created.");
         }
         catch (DataAccessException exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body("Operation failed. Error message: " + exception.getMessage()); }
     }
 
     @Override
-    public ResponseEntity findOne(String asOfDate, Integer personId, String addressType) {
+    public ResponseEntity findOne(String asOfDate, Integer personId, String idType) {
         try {
             dateValidator.checkDateFormat(asOfDate);
-            addressTypesService.findOne(addressType);
+            legalIdTypesService.findOne(idType);
         }
         catch (Exception exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(exception.getMessage()); }
 
         try {
-            PersonAddress result = personAddressRepository.findOne(asOfDate, personId, addressType);
+            PersonLegalId result = personLegalIdRepository.findOne(asOfDate, personId, idType);
             return ResponseEntity.status(HttpStatus.OK)
                     .body(result);
         }
         catch (EmptyResultDataAccessException exception) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("PersonAddress with this personId and addressType does not exist."); }
+                    .body("PersonLegalId with this personId and idType does not exist."); }
     }
 
     @Override
@@ -80,7 +81,7 @@ public class PersonAddressService implements IPersonAddressService {
         catch (Exception exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(exception.getMessage()); }
 
-        List<PersonAddress> result = personAddressRepository.findAll(asOfDate);
+        List<PersonLegalId> result = personLegalIdRepository.findAll(asOfDate);
 
         if (result.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body("No data found.");
@@ -97,7 +98,7 @@ public class PersonAddressService implements IPersonAddressService {
         catch (Exception exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(exception.getMessage()); }
 
-        List<PersonAddress> result = personAddressRepository.findAll(asOfDate, personId);
+        List<PersonLegalId> result = personLegalIdRepository.findAll(asOfDate, personId);
 
         if (result.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body("No data found.");
@@ -107,15 +108,15 @@ public class PersonAddressService implements IPersonAddressService {
     }
 
     @Override
-    public ResponseEntity findAll(String asOfDate, String addressType) {
+    public ResponseEntity findAll(String asOfDate, String idType) {
         try {
             dateValidator.checkDateFormat(asOfDate);
-            addressTypesService.findOne(addressType);
+            legalIdTypesService.findOne(idType);
         }
         catch (Exception exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(exception.getMessage()); }
 
-        List<PersonAddress> result = personAddressRepository.findAll(asOfDate, addressType);
+        List<PersonLegalId> result = personLegalIdRepository.findAll(asOfDate, idType);
 
         if (result.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body("No data found.");
@@ -125,37 +126,37 @@ public class PersonAddressService implements IPersonAddressService {
     }
 
     @Override
-    public ResponseEntity update(PersonAddress personAddress, Integer personId, String addressType) {
+    public ResponseEntity update(PersonLegalId personLegalId, Integer personId, String idType) {
         try {
-            personAddressValidator.checkPersonAddressInput(personAddress);
-            addressTypesService.findOne(addressType);
-            personAddressValidator.checkIfPersonAddressExists(personId, addressType, personAddressRepository);
+            personLegalIdValidator.checkPersonLegalIdInput(personLegalId);
+            legalIdTypesService.findOne(idType);
+            personLegalIdValidator.checkIfPersonLegalIdExists(personId, idType, personLegalIdRepository);
         }
         catch (Exception exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(exception.getMessage()); }
 
         try {
-            personAddressRepository.update(personAddress, personId, addressType);
+            personLegalIdRepository.update(personLegalId, personId, idType);
             return ResponseEntity.status(HttpStatus.OK)
-                    .body("PersonAddress successfully updated.");
+                    .body("PersonLegalId successfully updated.");
         }
         catch (DataAccessException exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body("Operation failed. Error message: " + exception.getMessage()); }
     }
 
     @Override
-    public ResponseEntity delete(Integer personId, String addressType) {
+    public ResponseEntity delete(Integer personId, String idType) {
         try {
-            addressTypesService.findOne(addressType);
-            personAddressValidator.checkIfPersonAddressExists(personId, addressType, personAddressRepository);
+            legalIdTypesService.findOne(idType);
+            personLegalIdValidator.checkIfPersonLegalIdExists(personId, idType, personLegalIdRepository);
         }
         catch (Exception exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(exception.getMessage()); }
 
         try {
-            personAddressRepository.delete(personId, addressType);
+            personLegalIdRepository.delete(personId, idType);
             return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                    .body("PersonAddress successfully deleted.");
+                    .body("PersonLegalId successfully deleted.");
         }
         catch (DataAccessException exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body("Operation failed. Error message: " + exception.getMessage()); }
