@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -31,35 +32,51 @@ public class PersonService implements IPersonService {
     @Autowired
     private PersonLegalIdRepository personLegalIdRepository;
 
+    //Validators for checking user input.
     private final PersonValidator personValidator = new PersonValidator();
     private final DateValidator dateValidator = new DateValidator();
 
     @Override
     public ResponseEntity save(Person person) {
+        //Run validators on provided data and catch exception in case of validation failure.
         try {
+            //Validate Person information.
             personValidator.checkPersonInput(person);
         }
+        //Return ResponseEntity with error message in case of failed validation.
         catch (Exception exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(exception.getMessage()); }
 
+        //Try to insert new Person into database.
         try {
             personRepository.save(person);
             return ResponseEntity.status(HttpStatus.CREATED)
+                    .contentType(MediaType.APPLICATION_JSON)
                     .body("New Person successfully created.");
         }
+        //Return error message in case something went wrong.
         catch (DataAccessException exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
                 .body("Operation failed. Error message: " + exception.getMessage()); }
     }
 
     @Override
     public ResponseEntity findOne(String asOfDate, Integer personId) {
+        //Run validators on provided data and catch exception in case of validation failure.
         try {
+            //Check if provided date is valid.
             dateValidator.checkDateFormat(asOfDate);
+
+            //Check if Person with provided personId exists.
             personValidator.checkIfPersonExists(personId, personRepository);
         }
+        //Return ResponseEntity with error message in case of failed validation.
         catch (Exception exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(exception.getMessage()); }
 
+        //Try to find one Person with provided personId, as well as try to find all addresses and legal ids for that Person.
         try {
             Person person = personRepository.findOne(asOfDate, personId);
             List<PersonAddress> personAddressList = personAddressRepository.findAll(asOfDate, personId);
@@ -67,27 +84,41 @@ public class PersonService implements IPersonService {
 
             PersonDTO result = new PersonDTO(person, personAddressList, personLegalIdList);
 
+            //Return Person with provided personId, as well as their addresses and legal ids.
             return ResponseEntity.status(HttpStatus.OK)
+                    .contentType(MediaType.APPLICATION_JSON)
                     .body(result);
-        } catch (EmptyResultDataAccessException exception) {
+        }
+
+        //Return error message in case nothing was found.
+        catch (EmptyResultDataAccessException exception) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .contentType(MediaType.APPLICATION_JSON)
                     .body("No data found.");
         }
     }
 
     @Override
     public ResponseEntity findAll(String asOfDate) {
+        //Run validators on provided data and catch exception in case of validation failure.
         try {
+            //Check if provided date is valid.
             dateValidator.checkDateFormat(asOfDate);
         }
+        //Return ResponseEntity with error message in case of failed validation.
         catch (Exception exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(exception.getMessage()); }
 
+        //Try to find all Persons.
         List<Person> personList = personRepository.findAll(asOfDate);
 
+        //Return error message in case nothing was found.
         if (personList.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .contentType(MediaType.APPLICATION_JSON)
                 .body("No data found.");
 
+        //Else try to find all addresses and legal ids for every person.
         else {
             List<PersonDTO> result = new ArrayList<>();
             personList.forEach((person) -> {
@@ -96,43 +127,63 @@ public class PersonService implements IPersonService {
                 result.add(new PersonDTO(person, personAddressList, personLegalIdList));
                     });
 
+            //Return all Persons with their addresses and legal ids.
             return ResponseEntity.status(HttpStatus.OK)
+                    .contentType(MediaType.APPLICATION_JSON)
                     .body(result);
         }
     }
 
     @Override
     public ResponseEntity update(Person person, Integer personId) {
+        //Run validators on provided data and catch exception in case of validation failure.
         try {
+            //Validate PersonAddress information.
             personValidator.checkPersonInput(person);
+
+            //Check if Person with provided personId exists.
             personValidator.checkIfPersonExists(personId, personRepository);
         }
+        //Return ResponseEntity with error message in case of failed validation.
         catch (Exception exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(exception.getMessage()); }
 
+        //Try to update Person with new information.
         try {
             personRepository.update(person, personId);
             return ResponseEntity.status(HttpStatus.OK)
+                    .contentType(MediaType.APPLICATION_JSON)
                     .body("Person successfully updated.");
         }
+        //Return error message in case something went wrong.
         catch (DataAccessException exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
                 .body("Operation failed. Error message: " + exception.getMessage()); }
     }
 
     @Override
     public ResponseEntity delete(Integer personId) {
+        //Run validators on provided data and catch exception in case of validation failure.
         try {
+            //Check if Person with provided personId exists.
             personValidator.checkIfPersonExists(personId, personRepository);
         }
+        //Return ResponseEntity with error message in case of failed validation.
         catch (Exception exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(exception.getMessage()); }
 
+        //Try to delete Person with provided personId.
         try {
             personRepository.delete(personId);
             return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                    .contentType(MediaType.APPLICATION_JSON)
                     .body("Person successfully deleted.");
         }
+        //Return error message in case something went wrong.
         catch (DataAccessException exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
                 .body("Operation failed. Error message: " + exception.getMessage()); }
     }
 }

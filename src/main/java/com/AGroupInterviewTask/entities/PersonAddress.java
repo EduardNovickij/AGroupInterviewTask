@@ -7,16 +7,19 @@ import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
+//Class representing PersonAddress entity.
 @Entity
 @Table(name = "PersonAddress")
 public class PersonAddress {
 
+    //Data stored in PersonAddress entity:
     @EmbeddedId
     private final PersonAddressKey personAddressKey;
     private final String city;
     private final String street;
     private final String appartment;
 
+    //Constructor:
     @JsonCreator
     public PersonAddress(@JsonProperty("addressType") String addressType,
                          @JsonProperty("personId") Integer personId,
@@ -29,6 +32,7 @@ public class PersonAddress {
         this.appartment = appartment;
     }
 
+    //Getters:
     public String getAddressType() {
         return personAddressKey.getAddressType();
     }
@@ -49,6 +53,7 @@ public class PersonAddress {
         return appartment;
     }
 
+    //ToString:
     @Override
     public String toString() {
         return "{" +

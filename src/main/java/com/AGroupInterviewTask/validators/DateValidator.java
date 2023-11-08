@@ -20,8 +20,9 @@ public record DateValidator() {
         String errorMessageStart = "Incorrect input: \n";
         String errorMessageEnd = "";
 
-        if(date.length() == 0) errorMessageEnd += "Date can't be empty\n";
-        if(!isDateFormatValid(date)) errorMessageEnd += "Date must be in YYYY-MM-DD format\n";
+        if(date == null) throw new Exception(errorMessageStart + "Date can't be null.\n");
+        if(date.length() == 0) errorMessageEnd += "Date can't be empty.\n";
+        if(!isDateFormatValid(date)) errorMessageEnd += "Date must be in YYYY-MM-DD format.\n";
 
         if(!errorMessageEnd.equals("")) throw new Exception(errorMessageStart + errorMessageEnd);
     }

@@ -3,6 +3,7 @@ package com.AGroupInterviewTask.services;
 import com.AGroupInterviewTask.entities.PersonLegalId;
 import org.springframework.http.ResponseEntity;
 
+//Interface for PersonLegalIdService.
 public interface IPersonLegalIdService {
 
     ResponseEntity save(PersonLegalId personLegalId);

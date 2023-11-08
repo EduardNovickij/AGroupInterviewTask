@@ -11,6 +11,8 @@ public class AddressTypesService implements IAddressTypesService {
     @Autowired
     private AddressTypesRepository addressTypesRepository;
 
+    /*Method for checking if provided addressType is valid by checking if it exists in SQLite database.
+    * Throws exception if provided addressType does not exist and therefore is invalid.*/
     @Override
     public void findOne(String addressType) throws Exception {
         try{

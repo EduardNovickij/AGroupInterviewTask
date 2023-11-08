@@ -10,28 +10,27 @@ public record PersonValidator() {
     private static final DateValidator dateValidator = new DateValidator();
 
     public void checkPersonInput(Person person) throws Exception {
-        dateValidator.checkDateFormat(person.getBirthDate());
 
         int maxGivenNameLength = 50;
-        int minGivenNameLength = 1;
 
         int maxFamilyNameLength = 50;
-        int minFamilyNameLength = 1;
 
         int genderLength = 1;
 
         String errorMessageStart = "Incorrect input: \n";
         String errorMessageEnd = "";
 
-        if(person.getGivenName().length() > maxGivenNameLength) errorMessageEnd += "givenName is too long\n";
-        if(person.getGivenName().length() < minGivenNameLength) errorMessageEnd += "givenName is too short\n";
+        if(person.getBirthDate() == null) throw new Exception(errorMessageStart + "birthDate can't be null.");
+        dateValidator.checkDateFormat(person.getBirthDate());
 
-        if(person.getFamilyName().length() > maxFamilyNameLength) errorMessageEnd += "familyName is too long\n";
-        if(person.getFamilyName().length() < minFamilyNameLength) errorMessageEnd += "familyName is too short\n";
+        if(person.getGivenName() == null) errorMessageEnd += "givenName can't be null.\n";
+        else if(person.getGivenName().length() > maxGivenNameLength) errorMessageEnd += "givenName is too long.\n";
 
-        if(person.getGender().length() != genderLength) errorMessageEnd += "gender must be of length " + genderLength + "\n";
+        if(person.getFamilyName() == null) errorMessageEnd += "familyName can't be null.\n";
+        else if(person.getFamilyName().length() > maxFamilyNameLength) errorMessageEnd += "familyName is too long.\n";
 
-        if(person.getBirthDate().length() == 0) errorMessageEnd += "birthDate can't be empty\n";
+        if(person.getGender() == null) errorMessageEnd += "gender can't be null.\n";
+        else if(person.getGender().length() != genderLength) errorMessageEnd += "gender must be of length " + genderLength + ".\n";
 
         if(!errorMessageEnd.equals("")) throw new Exception(errorMessageStart + errorMessageEnd);
     }

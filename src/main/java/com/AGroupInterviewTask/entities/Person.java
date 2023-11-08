@@ -4,10 +4,13 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
+//Class representing Person entity.
+
 @Entity
 @Table(name = "Person")
 public class Person {
 
+    //Data stored in Person entity:
     @Id
     private final Integer personId;
     private final String givenName;
@@ -15,6 +18,7 @@ public class Person {
     private final String birthDate;
     private final String gender;
 
+    //Constructor:
     @JsonCreator
     public Person(@JsonProperty("personId") Integer personId,
                   @JsonProperty("givenName") String givenName,
@@ -28,6 +32,7 @@ public class Person {
         this.gender = gender;
     }
 
+    //Getters:
     public Integer getPersonId() {
         return personId;
     }
@@ -48,6 +53,7 @@ public class Person {
         return gender;
     }
 
+    //ToString:
     @Override
     public String toString() {
         return "{" +

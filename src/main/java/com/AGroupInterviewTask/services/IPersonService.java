@@ -3,6 +3,7 @@ package com.AGroupInterviewTask.services;
 import com.AGroupInterviewTask.entities.Person;
 import org.springframework.http.ResponseEntity;
 
+//Interface for PersonService.
 public interface IPersonService {
 
     ResponseEntity save(Person person);

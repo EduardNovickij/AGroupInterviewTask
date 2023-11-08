@@ -10,23 +10,21 @@ public record PersonAddressValidator() {
 
     public void checkPersonAddressInput(PersonAddress personAddress) throws Exception {
         int cityMaxLength = 50;
-        int cityMinLength = 1;
 
         int streetMaxLength = 50;
-        int streetMinLength = 1;
 
         int appartmentMaxLength = 50;
 
         String errorMessageStart = "Incorrect input: \n";
         String errorMessageEnd = "";
 
-        if(personAddress.getCity().length() > cityMaxLength) errorMessageEnd += "city is too long\n";
-        if(personAddress.getCity().length() < cityMinLength) errorMessageEnd += "city is too short\n";
+        if(personAddress.getCity() == null) errorMessageEnd += "city can't be null.\n";
+        else if(personAddress.getCity().length() > cityMaxLength) errorMessageEnd += "city is too long.\n";
 
-        if(personAddress.getStreet().length() > streetMaxLength) errorMessageEnd += "street is too long\n";
-        if(personAddress.getStreet().length() < streetMinLength) errorMessageEnd += "street is too short\n";
+        if(personAddress.getStreet() == null) errorMessageEnd += "street can't be null.\n";
+        else if(personAddress.getStreet().length() > streetMaxLength) errorMessageEnd += "street is too long.\n";
 
-        if(personAddress.getAppartment().length() > appartmentMaxLength) errorMessageEnd += "appartment is too long\n";
+        if(personAddress.getAppartment().length() > appartmentMaxLength) errorMessageEnd += "appartment is too long.\n";
 
         if(!errorMessageEnd.equals("")) throw new Exception(errorMessageStart + errorMessageEnd);
     }

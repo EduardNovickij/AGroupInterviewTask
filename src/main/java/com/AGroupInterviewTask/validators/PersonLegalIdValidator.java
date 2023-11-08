@@ -10,14 +10,17 @@ public record PersonLegalIdValidator() {
     private static final DateValidator dateValidator = new DateValidator();
 
     public void checkPersonLegalIdInput(PersonLegalId personLegalId) throws Exception {
-        dateValidator.checkDateFormat(personLegalId.getIssueDate());
-
         int issuedByMaxLength = 50;
 
         String errorMessageStart = "Incorrect input: \n";
         String errorMessageEnd = "";
 
-        if(personLegalId.getIssuedBy().length() > issuedByMaxLength) errorMessageEnd += "issuedBy is too long\n";
+        if(personLegalId.getIssueDate() == null) throw new Exception(errorMessageStart + "issueDate can't be null.");
+        dateValidator.checkDateFormat(personLegalId.getIssueDate());
+
+        if(personLegalId.getIdNumber() == null) errorMessageEnd += "idNumber can't be null.\n";
+
+        if(personLegalId.getIssuedBy().length() > issuedByMaxLength) errorMessageEnd += "issuedBy is too long.\n";
 
         if(!errorMessageEnd.equals("")) throw new Exception(errorMessageStart + errorMessageEnd);
     }

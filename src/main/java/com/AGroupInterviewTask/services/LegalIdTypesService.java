@@ -11,6 +11,8 @@ public class LegalIdTypesService implements ILegalIdTypesService {
     @Autowired
     LegalIdTypesRepository legalIdTypesRepository;
 
+    /*Method for checking if provided idType is valid by checking if it exists in SQLite database.
+     * Throws exception if provided idType does not exist and therefore is invalid.*/
     @Override
     public void findOne(String idType) throws Exception {
         try{
