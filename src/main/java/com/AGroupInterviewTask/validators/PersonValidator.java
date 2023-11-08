@@ -7,9 +7,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import java.sql.Date;
 
 public record PersonValidator() {
-    private static final DateValidator dateValidator = new DateValidator();
-
-    public void checkPersonInput(Person person) throws Exception {
+    public static void checkPersonInput(Person person) throws Exception {
 
         int maxGivenNameLength = 50;
 
@@ -21,7 +19,7 @@ public record PersonValidator() {
         String errorMessageEnd = "";
 
         if(person.getBirthDate() == null) throw new Exception(errorMessageStart + "birthDate can't be null.");
-        dateValidator.checkDateFormat(person.getBirthDate());
+        DateValidator.checkDateFormat(person.getBirthDate());
 
         if(person.getGivenName() == null) errorMessageEnd += "givenName can't be null.\n";
         else if(person.getGivenName().length() > maxGivenNameLength) errorMessageEnd += "givenName is too long.\n";
@@ -35,7 +33,7 @@ public record PersonValidator() {
         if(!errorMessageEnd.equals("")) throw new Exception(errorMessageStart + errorMessageEnd);
     }
 
-    public void checkIfPersonExists(
+    public static void checkIfPersonExists(
             Integer personId, PersonRepository personRepository)
             throws Exception {
         try {

@@ -28,27 +28,22 @@ public class PersonLegalIdService implements IPersonLegalIdService {
     @Autowired
     LegalIdTypesService legalIdTypesService;
 
-    //Validators for checking user input.
-    private final PersonLegalIdValidator personLegalIdValidator = new PersonLegalIdValidator();
-    private final PersonValidator personValidator = new PersonValidator();
-    private final DateValidator dateValidator = new DateValidator();
-
     //Method for inserting new PersonLegalId into database.
     @Override
     public ResponseEntity save(PersonLegalId personLegalId) {
         //Run validators on provided data and catch exception in case of validation failure.
         try {
             //Validate PersonLegalId information.
-            personLegalIdValidator.checkPersonLegalIdInput(personLegalId);
+            PersonLegalIdValidator.checkPersonLegalIdInput(personLegalId);
 
             //Check if provided idType is valid.
             legalIdTypesService.findOne(personLegalId.getIdType());
 
             //Check if Person with provided personId exists.
-            personValidator.checkIfPersonExists(personLegalId.getPersonId(), personRepository);
+            PersonValidator.checkIfPersonExists(personLegalId.getPersonId(), personRepository);
 
             //Check if PersonLegalId with provided personId and idType already exists.
-            personLegalIdValidator.checkIfPersonLegalIdAlreadyExists(
+            PersonLegalIdValidator.checkIfPersonLegalIdAlreadyExists(
                     personLegalId.getPersonId(),
                     personLegalId.getIdType(),
                     personLegalIdRepository);
@@ -76,7 +71,7 @@ public class PersonLegalIdService implements IPersonLegalIdService {
         //Run validators on provided data and catch exception in case of validation failure.
         try {
             //Check if provided date is valid.
-            dateValidator.checkDateFormat(asOfDate);
+            DateValidator.checkDateFormat(asOfDate);
 
             //Check if provided idType is valid.
             legalIdTypesService.findOne(idType);
@@ -105,7 +100,7 @@ public class PersonLegalIdService implements IPersonLegalIdService {
         //Run validators on provided data and catch exception in case of validation failure.
         try {
             //Check if provided date is valid.
-            dateValidator.checkDateFormat(asOfDate);
+            DateValidator.checkDateFormat(asOfDate);
         }
         //Return ResponseEntity with error message in case of failed validation.
         catch (Exception exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -131,7 +126,7 @@ public class PersonLegalIdService implements IPersonLegalIdService {
         //Run validators on provided data and catch exception in case of validation failure.
         try {
             //Check if provided date is valid.
-            dateValidator.checkDateFormat(asOfDate);
+            DateValidator.checkDateFormat(asOfDate);
         }
         //Return ResponseEntity with error message in case of failed validation.
         catch (Exception exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -157,7 +152,7 @@ public class PersonLegalIdService implements IPersonLegalIdService {
         //Run validators on provided data and catch exception in case of validation failure.
         try {
             //Check if provided date is valid.
-            dateValidator.checkDateFormat(asOfDate);
+            DateValidator.checkDateFormat(asOfDate);
 
             //Check if provided idType is valid.
             legalIdTypesService.findOne(idType);
@@ -186,13 +181,13 @@ public class PersonLegalIdService implements IPersonLegalIdService {
         //Run validators on provided data and catch exception in case of validation failure.
         try {
             //Validate PersonLegalId information.
-            personLegalIdValidator.checkPersonLegalIdInput(personLegalId);
+            PersonLegalIdValidator.checkPersonLegalIdInput(personLegalId);
 
             //Check if provided idType is valid.
             legalIdTypesService.findOne(idType);
 
             //Check if PersonLegalId with provided personId and idType exists.
-            personLegalIdValidator.checkIfPersonLegalIdExists(personId, idType, personLegalIdRepository);
+            PersonLegalIdValidator.checkIfPersonLegalIdExists(personId, idType, personLegalIdRepository);
         }
         //Return ResponseEntity with error message in case of failed validation.
         catch (Exception exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -220,7 +215,7 @@ public class PersonLegalIdService implements IPersonLegalIdService {
             legalIdTypesService.findOne(idType);
 
             //Check if PersonLegalId with provided personId and idType exists.
-            personLegalIdValidator.checkIfPersonLegalIdExists(personId, idType, personLegalIdRepository);
+            PersonLegalIdValidator.checkIfPersonLegalIdExists(personId, idType, personLegalIdRepository);
         }
         //Return ResponseEntity with error message in case of failed validation.
         catch (Exception exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)

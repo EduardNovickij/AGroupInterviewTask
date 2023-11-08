@@ -16,7 +16,7 @@ public record DateValidator() {
         }
     }
 
-    public void checkDateFormat(String date) throws Exception {
+    public static void checkDateFormat(String date) throws Exception {
         String errorMessageStart = "Incorrect input: \n";
         String errorMessageEnd = "";
 

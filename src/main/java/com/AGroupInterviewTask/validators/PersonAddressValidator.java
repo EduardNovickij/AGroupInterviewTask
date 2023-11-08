@@ -8,7 +8,7 @@ import java.sql.Date;
 
 public record PersonAddressValidator() {
 
-    public void checkPersonAddressInput(PersonAddress personAddress) throws Exception {
+    public static void checkPersonAddressInput(PersonAddress personAddress) throws Exception {
         int cityMaxLength = 50;
 
         int streetMaxLength = 50;
@@ -29,7 +29,7 @@ public record PersonAddressValidator() {
         if(!errorMessageEnd.equals("")) throw new Exception(errorMessageStart + errorMessageEnd);
     }
 
-    public void checkIfPersonAddressAlreadyExists(
+    public static void checkIfPersonAddressAlreadyExists(
             Integer personId, String addressType, PersonAddressRepository personAddressRepository)
     throws Exception {
         try {
@@ -39,7 +39,7 @@ public record PersonAddressValidator() {
         catch (EmptyResultDataAccessException ignored) {}
     }
 
-    public void checkIfPersonAddressExists(
+    public static void checkIfPersonAddressExists(
             Integer personId, String addressType, PersonAddressRepository personAddressRepository)
             throws Exception {
         try {

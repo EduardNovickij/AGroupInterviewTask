@@ -1,5 +1,6 @@
 package com.AGroupInterviewTask.services;
 
+import com.AGroupInterviewTask.dtos.DTOMapper;
 import com.AGroupInterviewTask.dtos.PersonDTO;
 import com.AGroupInterviewTask.entities.Person;
 import com.AGroupInterviewTask.entities.PersonAddress;
@@ -32,16 +33,12 @@ public class PersonService implements IPersonService {
     @Autowired
     private PersonLegalIdRepository personLegalIdRepository;
 
-    //Validators for checking user input.
-    private final PersonValidator personValidator = new PersonValidator();
-    private final DateValidator dateValidator = new DateValidator();
-
     @Override
     public ResponseEntity save(Person person) {
         //Run validators on provided data and catch exception in case of validation failure.
         try {
             //Validate Person information.
-            personValidator.checkPersonInput(person);
+            PersonValidator.checkPersonInput(person);
         }
         //Return ResponseEntity with error message in case of failed validation.
         catch (Exception exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -66,10 +63,10 @@ public class PersonService implements IPersonService {
         //Run validators on provided data and catch exception in case of validation failure.
         try {
             //Check if provided date is valid.
-            dateValidator.checkDateFormat(asOfDate);
+            DateValidator.checkDateFormat(asOfDate);
 
             //Check if Person with provided personId exists.
-            personValidator.checkIfPersonExists(personId, personRepository);
+            PersonValidator.checkIfPersonExists(personId, personRepository);
         }
         //Return ResponseEntity with error message in case of failed validation.
         catch (Exception exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -82,7 +79,7 @@ public class PersonService implements IPersonService {
             List<PersonAddress> personAddressList = personAddressRepository.findAll(asOfDate, personId);
             List<PersonLegalId> personLegalIdList = personLegalIdRepository.findAll(asOfDate, personId);
 
-            PersonDTO result = new PersonDTO(person, personAddressList, personLegalIdList);
+            PersonDTO result = DTOMapper.mapToPersonDTO(person, personAddressList, personLegalIdList);
 
             //Return Person with provided personId, as well as their addresses and legal ids.
             return ResponseEntity.status(HttpStatus.OK)
@@ -103,7 +100,7 @@ public class PersonService implements IPersonService {
         //Run validators on provided data and catch exception in case of validation failure.
         try {
             //Check if provided date is valid.
-            dateValidator.checkDateFormat(asOfDate);
+            DateValidator.checkDateFormat(asOfDate);
         }
         //Return ResponseEntity with error message in case of failed validation.
         catch (Exception exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -124,7 +121,7 @@ public class PersonService implements IPersonService {
             personList.forEach((person) -> {
                 List<PersonAddress> personAddressList = personAddressRepository.findAll(asOfDate, person.getPersonId());
                 List<PersonLegalId> personLegalIdList = personLegalIdRepository.findAll(asOfDate, person.getPersonId());
-                result.add(new PersonDTO(person, personAddressList, personLegalIdList));
+                result.add(DTOMapper.mapToPersonDTO(person, personAddressList, personLegalIdList));
                     });
 
             //Return all Persons with their addresses and legal ids.
@@ -139,10 +136,10 @@ public class PersonService implements IPersonService {
         //Run validators on provided data and catch exception in case of validation failure.
         try {
             //Validate PersonAddress information.
-            personValidator.checkPersonInput(person);
+            PersonValidator.checkPersonInput(person);
 
             //Check if Person with provided personId exists.
-            personValidator.checkIfPersonExists(personId, personRepository);
+            PersonValidator.checkIfPersonExists(personId, personRepository);
         }
         //Return ResponseEntity with error message in case of failed validation.
         catch (Exception exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -167,7 +164,7 @@ public class PersonService implements IPersonService {
         //Run validators on provided data and catch exception in case of validation failure.
         try {
             //Check if Person with provided personId exists.
-            personValidator.checkIfPersonExists(personId, personRepository);
+            PersonValidator.checkIfPersonExists(personId, personRepository);
         }
         //Return ResponseEntity with error message in case of failed validation.
         catch (Exception exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)

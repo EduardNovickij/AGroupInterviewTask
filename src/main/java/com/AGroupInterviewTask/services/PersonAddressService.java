@@ -27,27 +27,22 @@ public class PersonAddressService implements IPersonAddressService {
     @Autowired
     private IAddressTypesService addressTypesService;
 
-    //Validators for checking user input.
-    private final PersonAddressValidator personAddressValidator = new PersonAddressValidator();
-    private final PersonValidator personValidator = new PersonValidator();
-    private final DateValidator dateValidator = new DateValidator();
-
     //Method for inserting new PersonAddress into database.
     @Override
     public ResponseEntity save(PersonAddress personAddress) {
         //Run validators on provided data and catch exception in case of validation failure.
         try {
             //Validate PersonAddress information.
-            personAddressValidator.checkPersonAddressInput(personAddress);
+            PersonAddressValidator.checkPersonAddressInput(personAddress);
 
             //Check if provided addressType is valid.
             addressTypesService.findOne(personAddress.getAddressType());
 
             //Check if Person with provided personId exists.
-            personValidator.checkIfPersonExists(personAddress.getPersonId(), personRepository);
+            PersonValidator.checkIfPersonExists(personAddress.getPersonId(), personRepository);
 
             //Check if PersonAddress with provided personId and addressType already exists.
-            personAddressValidator.checkIfPersonAddressAlreadyExists(
+            PersonAddressValidator.checkIfPersonAddressAlreadyExists(
                     personAddress.getPersonId(),
                     personAddress.getAddressType(),
                     personAddressRepository);
@@ -76,7 +71,7 @@ public class PersonAddressService implements IPersonAddressService {
         //Run validators on provided data and catch exception in case of validation failure.
         try {
             //Check if provided date is valid.
-            dateValidator.checkDateFormat(asOfDate);
+            DateValidator.checkDateFormat(asOfDate);
 
             //Check if provided addressType is valid.
             addressTypesService.findOne(addressType);
@@ -105,7 +100,7 @@ public class PersonAddressService implements IPersonAddressService {
         //Run validators on provided data and catch exception in case of validation failure.
         try {
             //Check if provided date is valid.
-            dateValidator.checkDateFormat(asOfDate);
+            DateValidator.checkDateFormat(asOfDate);
         }
         //Return ResponseEntity with error message in case of failed validation.
         catch (Exception exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -131,7 +126,7 @@ public class PersonAddressService implements IPersonAddressService {
         //Run validators on provided data and catch exception in case of validation failure.
         try {
             //Check if provided date is valid.
-            dateValidator.checkDateFormat(asOfDate);
+            DateValidator.checkDateFormat(asOfDate);
         }
         //Return ResponseEntity with error message in case of failed validation.
         catch (Exception exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -157,7 +152,7 @@ public class PersonAddressService implements IPersonAddressService {
         //Run validators on provided data and catch exception in case of validation failure.
         try {
             //Check if provided date is valid.
-            dateValidator.checkDateFormat(asOfDate);
+            DateValidator.checkDateFormat(asOfDate);
 
             //Check if provided addressType is valid.
             addressTypesService.findOne(addressType);
@@ -186,13 +181,13 @@ public class PersonAddressService implements IPersonAddressService {
         //Run validators on provided data and catch exception in case of validation failure.
         try {
             //Validate PersonAddress information.
-            personAddressValidator.checkPersonAddressInput(personAddress);
+            PersonAddressValidator.checkPersonAddressInput(personAddress);
 
             //Check if provided addressType is valid.
             addressTypesService.findOne(addressType);
 
             //Check if PersonAddress with provided personId and addressType exists.
-            personAddressValidator.checkIfPersonAddressExists(personId, addressType, personAddressRepository);
+            PersonAddressValidator.checkIfPersonAddressExists(personId, addressType, personAddressRepository);
         }
         //Return ResponseEntity with error message in case of failed validation.
         catch (Exception exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -220,7 +215,7 @@ public class PersonAddressService implements IPersonAddressService {
             addressTypesService.findOne(addressType);
 
             //Check if PersonAddress with provided personId and addressType exists.
-            personAddressValidator.checkIfPersonAddressExists(personId, addressType, personAddressRepository);
+            PersonAddressValidator.checkIfPersonAddressExists(personId, addressType, personAddressRepository);
         }
         //Return ResponseEntity with error message in case of failed validation.
         catch (Exception exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)

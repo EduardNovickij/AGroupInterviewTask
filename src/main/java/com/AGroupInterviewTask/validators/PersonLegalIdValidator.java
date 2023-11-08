@@ -7,16 +7,14 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import java.sql.Date;
 
 public record PersonLegalIdValidator() {
-    private static final DateValidator dateValidator = new DateValidator();
-
-    public void checkPersonLegalIdInput(PersonLegalId personLegalId) throws Exception {
+    public static void checkPersonLegalIdInput(PersonLegalId personLegalId) throws Exception {
         int issuedByMaxLength = 50;
 
         String errorMessageStart = "Incorrect input: \n";
         String errorMessageEnd = "";
 
         if(personLegalId.getIssueDate() == null) throw new Exception(errorMessageStart + "issueDate can't be null.");
-        dateValidator.checkDateFormat(personLegalId.getIssueDate());
+        DateValidator.checkDateFormat(personLegalId.getIssueDate());
 
         if(personLegalId.getIdNumber() == null) errorMessageEnd += "idNumber can't be null.\n";
 
@@ -25,7 +23,7 @@ public record PersonLegalIdValidator() {
         if(!errorMessageEnd.equals("")) throw new Exception(errorMessageStart + errorMessageEnd);
     }
 
-    public void checkIfPersonLegalIdAlreadyExists(
+    public static void checkIfPersonLegalIdAlreadyExists(
             Integer personId, String idType, PersonLegalIdRepository personLegalIdRepository)
             throws Exception {
         try {
@@ -35,7 +33,7 @@ public record PersonLegalIdValidator() {
         catch (EmptyResultDataAccessException ignored) {}
     }
 
-    public void checkIfPersonLegalIdExists(
+    public static void checkIfPersonLegalIdExists(
             Integer personId, String idType, PersonLegalIdRepository personLegalIdRepository)
             throws Exception {
         try {
