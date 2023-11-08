@@ -1,9 +1,5 @@
 package com.AGroupInterviewTask.dtos;
 
-import com.AGroupInterviewTask.entities.Person;
-import com.AGroupInterviewTask.entities.PersonAddress;
-import com.AGroupInterviewTask.entities.PersonLegalId;
-
 import java.util.List;
 
 //Class used for returning all information about Person as well as their Addresses and LegalIds.
@@ -16,8 +12,8 @@ public class PersonDTO {
     private final String birthDate;
     private final String gender;
 
-    private final List<PersonAddressDTO> personAddressDTOList;
-    private final List<PersonLegalIdDTO> personLegalIdDTOList;
+    private final List<PersonAddressDTO> personAddressList;
+    private final List<PersonLegalIdDTO> personLegalIdList;
 
     public PersonDTO(Integer personId, String givenName, String familyName, String birthDate, String gender,
                      List<PersonAddressDTO> personAddressDTOList, List<PersonLegalIdDTO> personLegalIdDTOList) {
@@ -26,8 +22,8 @@ public class PersonDTO {
         this.familyName = familyName;
         this.birthDate = birthDate;
         this.gender = gender;
-        this.personAddressDTOList = personAddressDTOList;
-        this.personLegalIdDTOList = personLegalIdDTOList;
+        this.personAddressList = personAddressDTOList;
+        this.personLegalIdList = personLegalIdDTOList;
     }
 
     public Integer getPersonId() {
@@ -50,12 +46,12 @@ public class PersonDTO {
         return gender;
     }
 
-    public List<PersonAddressDTO> getPersonAddressDTOList() {
-        return personAddressDTOList;
+    public List<PersonAddressDTO> getPersonAddressList() {
+        return personAddressList;
     }
 
-    public List<PersonLegalIdDTO> getPersonLegalIdDTOList() {
-        return personLegalIdDTOList;
+    public List<PersonLegalIdDTO> getPersonLegalIdList() {
+        return personLegalIdList;
     }
 
     @Override
@@ -66,8 +62,8 @@ public class PersonDTO {
                 ", familyName='" + familyName + '\'' +
                 ", birthDate='" + birthDate + '\'' +
                 ", gender='" + gender + '\'' +
-                ", PersonAddress=" + personAddressDTOList +
-                ", PersonLegalId=" + personLegalIdDTOList +
+                ", PersonAddress=" + personAddressList +
+                ", PersonLegalId=" + personLegalIdList +
                 '}';
     }
 }

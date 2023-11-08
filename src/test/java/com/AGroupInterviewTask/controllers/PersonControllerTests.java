@@ -128,4 +128,21 @@ public class PersonControllerTests {
         Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
     }
 
+    @Test
+    public void getSnapshotList() throws Exception {
+        String endPoint = "/getSnapshotList";
+
+        Mockito.when(personService.getSnapshotList())
+                .thenReturn(ResponseEntity
+                        .status(HttpStatus.OK)
+                        .body("Test"));
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get(endPoint);
+        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+        MockHttpServletResponse response = result.getResponse();
+
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.AGroupInterviewTask.services;
 
 import com.AGroupInterviewTask.repositories.AddressTypesRepository;
+import com.AGroupInterviewTask.services.interfaces.IAddressTypesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;

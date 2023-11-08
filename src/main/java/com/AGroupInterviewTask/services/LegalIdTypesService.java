@@ -1,6 +1,7 @@
 package com.AGroupInterviewTask.services;
 
 import com.AGroupInterviewTask.repositories.LegalIdTypesRepository;
+import com.AGroupInterviewTask.services.interfaces.ILegalIdTypesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;

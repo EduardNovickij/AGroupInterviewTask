@@ -1,4 +1,4 @@
-package com.AGroupInterviewTask.services;
+package com.AGroupInterviewTask.services.interfaces;
 
 import com.AGroupInterviewTask.entities.Person;
 import org.springframework.http.ResponseEntity;
@@ -15,4 +15,6 @@ public interface IPersonService {
     ResponseEntity update(Person person, Integer personId);
 
     ResponseEntity delete(Integer personId);
+
+    ResponseEntity getSnapshotList();
 }

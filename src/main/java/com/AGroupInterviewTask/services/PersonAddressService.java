@@ -3,6 +3,8 @@ package com.AGroupInterviewTask.services;
 import com.AGroupInterviewTask.entities.PersonAddress;
 import com.AGroupInterviewTask.repositories.PersonAddressRepository;
 import com.AGroupInterviewTask.repositories.PersonRepository;
+import com.AGroupInterviewTask.services.interfaces.IAddressTypesService;
+import com.AGroupInterviewTask.services.interfaces.IPersonAddressService;
 import com.AGroupInterviewTask.validators.DateValidator;
 import com.AGroupInterviewTask.validators.PersonAddressValidator;
 import com.AGroupInterviewTask.validators.PersonValidator;

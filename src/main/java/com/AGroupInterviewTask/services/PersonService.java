@@ -8,6 +8,7 @@ import com.AGroupInterviewTask.entities.PersonLegalId;
 import com.AGroupInterviewTask.repositories.PersonAddressRepository;
 import com.AGroupInterviewTask.repositories.PersonLegalIdRepository;
 import com.AGroupInterviewTask.repositories.PersonRepository;
+import com.AGroupInterviewTask.services.interfaces.IPersonService;
 import com.AGroupInterviewTask.validators.DateValidator;
 import com.AGroupInterviewTask.validators.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -182,5 +183,22 @@ public class PersonService implements IPersonService {
         catch (DataAccessException exception) { return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body("Operation failed. Error message: " + exception.getMessage()); }
+    }
+
+    //Method for retrieving information about for which dates there exist snapshots in the database.
+    @Override
+    public ResponseEntity getSnapshotList() {
+        //Try to find all snapshot dates.
+        List<String> snapshotList = personRepository.getSnapshotList();
+
+        //If empty return error message.
+        if(snapshotList.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body("There are no snapshots right now.");
+
+        //Else return list with snapshot dates.
+        else return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(snapshotList);
     }
 }

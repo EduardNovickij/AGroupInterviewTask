@@ -1,7 +1,7 @@
 package com.AGroupInterviewTask.controllers;
 
 import com.AGroupInterviewTask.entities.Person;
-import com.AGroupInterviewTask.services.IPersonService;
+import com.AGroupInterviewTask.services.interfaces.IPersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -62,5 +62,11 @@ public class PersonController {
     public ResponseEntity updatePerson(@RequestParam(name = "personId") Integer personId,
                                                @RequestBody Person person) {
         return personService.update(person, personId);
+    }
+
+    //Method for retrieving a list with snapshot dates.
+    @GetMapping("/getSnapshotList")
+    public ResponseEntity getSnaphotList() {
+        return personService.getSnapshotList();
     }
 }

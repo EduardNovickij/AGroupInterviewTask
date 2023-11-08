@@ -1,4 +1,4 @@
-package com.AGroupInterviewTask.services;
+package com.AGroupInterviewTask.services.interfaces;
 
 import com.AGroupInterviewTask.entities.PersonAddress;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,7 @@
 package com.AGroupInterviewTask.controllers;
 
 import com.AGroupInterviewTask.entities.PersonLegalId;
-import com.AGroupInterviewTask.services.IPersonLegalIdService;
+import com.AGroupInterviewTask.services.interfaces.IPersonLegalIdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

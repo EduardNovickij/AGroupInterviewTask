@@ -1,4 +1,4 @@
-package com.AGroupInterviewTask.services;
+package com.AGroupInterviewTask.services.interfaces;
 
 //Interface for LegalIdTypesService.
 public interface ILegalIdTypesService {

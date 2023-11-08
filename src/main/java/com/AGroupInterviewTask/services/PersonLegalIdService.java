@@ -3,6 +3,7 @@ package com.AGroupInterviewTask.services;
 import com.AGroupInterviewTask.entities.PersonLegalId;
 import com.AGroupInterviewTask.repositories.PersonLegalIdRepository;
 import com.AGroupInterviewTask.repositories.PersonRepository;
+import com.AGroupInterviewTask.services.interfaces.IPersonLegalIdService;
 import com.AGroupInterviewTask.validators.DateValidator;
 import com.AGroupInterviewTask.validators.PersonLegalIdValidator;
 import com.AGroupInterviewTask.validators.PersonValidator;

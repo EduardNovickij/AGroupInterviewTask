@@ -33,6 +33,11 @@ public class PersonRepository {
         );
     }
 
+    //Method for retrieving timestamps from resulting set.
+    private String mapRowToString(ResultSet resultSet, int rowNum) throws SQLException {
+        return resultSet.getString("timestamp");
+    }
+
     //Method for inserting new Person instance into Person entity.
     public void save(Person person) throws DataAccessException {
         String sqlQuery = "INSERT INTO Person(personId, givenName, familyName, birthDate, gender) " +
@@ -100,5 +105,12 @@ public class PersonRepository {
     public void delete(Integer personId) throws DataAccessException {
         String sqlQuery = "DELETE FROM Person WHERE personId = ? AND timestamp IS NULL";
         jdbcTemplate.update(sqlQuery, personId);
+    }
+
+    //Method for retrieving snapshot dates
+    public List<String> getSnapshotList() throws EmptyResultDataAccessException {
+        String sqlQuery = "SELECT DISTINCT timestamp FROM Person WHERE timestamp IS NOT NULL";
+
+        return jdbcTemplate.query(sqlQuery, this::mapRowToString);
     }
 }

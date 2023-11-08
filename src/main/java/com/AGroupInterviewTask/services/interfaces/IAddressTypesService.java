@@ -1,4 +1,4 @@
-package com.AGroupInterviewTask.services;
+package com.AGroupInterviewTask.services.interfaces;
 
 //Interface for AddressTypesService.
 public interface IAddressTypesService {
