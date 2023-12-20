@@ -1,3 +1,9 @@
+# Abstract
+
+* A small server on JAVA with REST API and SQLite database storing described entities. Each entity is extended with ability to store historical data, so DB can store and retrieve snapshot on any date and return person name, surname, legal id and addresses valid on the given date. REST API supports adding historical records in any order.
+
+![image](https://github.com/EduardNovickij/Java-RestAPI-SQLite/assets/85069206/9fffb4f9-78e7-43c0-8db5-37eaa8b67d1c)
+
 # Snapshots
 
 #### Snapshots are created and updated automatically:
